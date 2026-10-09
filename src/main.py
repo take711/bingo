@@ -1,5 +1,10 @@
-count_pick: int = 1
-ball_number: int = 1
+import ball_box
+
+ball_box: list = ball_box.make_ball_box()
+
+for index, ball_number in enumerate(ball_box, 1):
+    print(f"ball[{index}]:{ball_number}")
+
 
 card: list[int[int]] = [
     [1, 2, 3, 4, 5],
@@ -12,7 +17,6 @@ card: list[int[int]] = [
 count_reach: int = 0
 count_bingo: int = 0
 
-print(f"ball[{count_pick}]:{ball_number}")
 for row in card:
     print(row)
 print(f"REACH: {count_reach}")
