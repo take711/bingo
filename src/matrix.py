@@ -15,20 +15,27 @@ def get_candidates(row_number: int) -> list[int]:
             return list(range(61, 76))
 
 
-def get_matrix() -> list[list[int | str]]:
+def transpose_matrix(matrix_org: list[list[int | None]]):
+    return [row for row in zip(*matrix_org)]
+
+
+def get_matrix() -> list[list[int | None]]:
     row_range: int = 6
     line_range: int = 5
-    matrix: list[list[int | str]] = []
+    matrix_org: list[list[int | str]] = []
 
     for row_number in range(1, row_range):
         candidates: list[int] = get_candidates(row_number)
 
         # FREEが入るため、3列目のみ数字が一つ少なくなる
         if row_number == 3:
-            matrix.append(random.sample(candidates, k=line_range - 1))
+            matrix_org.append(random.sample(candidates, k=line_range - 1))
         else:
-            matrix.append(random.sample(candidates, k=line_range))
+            matrix_org.append(random.sample(candidates, k=line_range))
 
     # カードの真ん中にFREEを配置
-    matrix[2].insert(2, "FREE")
+    matrix_org[2].insert(2, None)
+
+    matrix: list[list[int | None]] = transpose_matrix(matrix_org)
+
     return matrix
