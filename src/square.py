@@ -1,19 +1,22 @@
 class Square:
     def __init__(self, value, mark: bool = False):
         self.number = value
-        self.is_marked = mark
+        self.marked = mark
 
     def show_number(self):
         value: str = str(self.number)
-        if self.is_marked:
+        if self.marked:
             return "(" + value + ")"
         return " " + value + " "
 
     def mark_square(self):
-        self.is_marked = True
+        self.marked = True
 
     def get_number(self):
         return self.number
+
+    def is_marked(self):
+        return self.marked
 
 
 if __name__ == "__main__":

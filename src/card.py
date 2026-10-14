@@ -24,12 +24,12 @@ class Row:
     def is_reach(self):
         count_marked: int = 0
         for square in self.data:
-            if square.is_marked:
+            if square.is_marked():
                 count_marked += 1
         return count_marked == 4
 
     def is_marked(self, column_number: int):
-        return self.data[column_number].is_marked
+        return self.data[column_number].is_marked()
 
 
 class Card:
