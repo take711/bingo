@@ -1,16 +1,16 @@
 from square import Square
 
 
-class Line:
-    def __init__(self, line: list[int | None]):
+class Row:
+    def __init__(self, row: list[int | None]):
         self.data: list[Square] = []
-        for square in line:
+        for square in row:
             if square == None:
                 self.data.append(Square("FREE", True))
             else:
                 self.data.append(Square(square))
 
-    def show_line(self):
+    def show_row(self):
         numbers: list[str] = []
         for square in self.data:
             numbers.append(square.show_number())
@@ -28,61 +28,66 @@ class Line:
                 count_marked += 1
         return count_marked == 4
 
-    def is_marked(self, row_number: int):
-        return self.data[row_number].is_marked
+    def is_marked(self, column_number: int):
+        return self.data[column_number].is_marked
 
 
 class Card:
     def __init__(self, matrix: list[list[int | None]]):
-        self.data: list[Line] = []
-        for line in matrix:
-            self.data.append(Line(line))
+        self.data: list[Row] = []
+        for row in matrix:
+            self.data.append(Row(row))
 
     def show_card(self):
-        for line in self.data:
-            print(line.show_line())
+        for row in self.data:
+            print(row.show_row())
 
     def mark_number(self, number: int):
-        for line in self.data:
-            line.mark_number(number)
+        for row in self.data:
+            row.mark_number(number)
 
     def count_reach(self):
-        count_line: int = 0
         count_row: int = 0
+        count_column: int = 0
         count_diagonal: int = 0
 
         # 行方向のリーチをカウント
-        for line in self.data:
-            if line.is_reach():
-                count_line += 1
+        for row in self.data:
+            if row.is_reach():
+                count_row += 1
 
         # 列方向のリーチをカウント
         index_range: int = 5
-        for row_index in range(index_range):
-            count_row_marked: int = 0
-            for row in self.data:
-                if row.is_marked(row_index):
-                    count_row_marked += 1
-            if count_row_marked == 4:
-                count_row += 1
+        for column_index in range(index_range):
+            count_column_marked: int = 0
+            for column in self.data:
+                if column.is_marked(column_index):
+                    count_column_marked += 1
+            if count_column_marked == 4:
+                count_column += 1
 
         # 左上→右下方向の対角線上のリーチをカウント
         count_upper_left_to_lower_right: int = 0
-        for index, line in enumerate(self.data, 0):
-            if line.is_marked(index):
+        for index, row in enumerate(self.data, 0):
+            if row.is_marked(index):
                 count_upper_left_to_lower_right += 1
         if count_upper_left_to_lower_right == 4:
             count_diagonal += 1
 
         # 右上→左下方向の対角線上のリーチをカウント
         count_upper_right_to_lower_left: int = 0
-        for index, line in enumerate(self.data, 0):
-            if line.is_marked(4 - index):
+        for index, row in enumerate(self.data, 0):
+            if row.is_marked(4 - index):
                 count_upper_right_to_lower_left += 1
         if count_upper_right_to_lower_left == 4:
             count_diagonal += 1
 
-        return count_line + count_row + count_diagonal
+        return count_row + count_column + count_diagonal
+
+    def count_bingo(self):
+        count_row: int = 0
+        count_column: int = 0
+        count_diagonal: int = 0
 
 
 if __name__ == "__main__":
