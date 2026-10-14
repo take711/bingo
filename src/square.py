@@ -12,6 +12,9 @@ class Square:
     def mark_square(self):
         self.is_marked = True
 
+    def get_number(self):
+        return self.number
+
 
 if __name__ == "__main__":
     square: Square = Square(5)

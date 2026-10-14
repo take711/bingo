@@ -16,6 +16,11 @@ class Line:
             numbers.append(square.show_number())
         return numbers
 
+    def mark_number(self, number: int):
+        for square in self.data:
+            if square.get_number() == number:
+                square.mark_square()
+
 
 class Card:
     def __init__(self, matrix: list[list[int | None]]):
@@ -26,6 +31,10 @@ class Card:
     def show_card(self):
         for line in self.data:
             print(line.show_line())
+
+    def mark_number(self, number: int):
+        for line in self.data:
+            line.mark_number(number)
 
 
 if __name__ == "__main__":
@@ -38,4 +47,8 @@ if __name__ == "__main__":
     ]
 
     card: Card = Card(matrix)
+    card.show_card()
+
+    test_number: int = 1
+    card.mark_number(test_number)
     card.show_card()

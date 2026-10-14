@@ -10,6 +10,8 @@ def main() -> None:
     count_bingo: int = 0
 
     for index, ball_number in enumerate(balls, 1):
+        card.mark_number(ball_number)
+
         print(f"ball[{index}]:{ball_number}")
         card.show_card()
         print(f"REACH: {count_reach}")
