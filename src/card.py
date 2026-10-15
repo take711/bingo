@@ -28,6 +28,9 @@ class Row:
                 count_marked += 1
         return count_marked == 4
 
+    def is_bingo(self):
+        return all(square.is_marked() for square in self.data)
+
     def is_marked(self, column_number: int):
         return self.data[column_number].is_marked()
 
@@ -60,26 +63,18 @@ class Card:
         index_range: int = 5
         for column_index in range(index_range):
             count_column_marked: int = 0
-            for column in self.data:
-                if column.is_marked(column_index):
+            for row in self.data:
+                if row.is_marked(column_index):
                     count_column_marked += 1
             if count_column_marked == 4:
                 count_column += 1
 
         # 左上→右下方向の対角線上のリーチをカウント
-        count_upper_left_to_lower_right: int = 0
-        for index, row in enumerate(self.data, 0):
-            if row.is_marked(index):
-                count_upper_left_to_lower_right += 1
-        if count_upper_left_to_lower_right == 4:
+        if self.count_marks_from_upper_left() == 4:
             count_diagonal += 1
 
         # 右上→左下方向の対角線上のリーチをカウント
-        count_upper_right_to_lower_left: int = 0
-        for index, row in enumerate(self.data, 0):
-            if row.is_marked(4 - index):
-                count_upper_right_to_lower_left += 1
-        if count_upper_right_to_lower_left == 4:
+        if self.count_marks_from_upper_right() == 4:
             count_diagonal += 1
 
         return count_row + count_column + count_diagonal
@@ -88,6 +83,41 @@ class Card:
         count_row: int = 0
         count_column: int = 0
         count_diagonal: int = 0
+
+        # 行方向のビンゴをカウント
+        for row in self.data:
+            if row.is_bingo():
+                count_row += 1
+
+        # 列方向のビンゴをカウント
+        index_range: int = 5
+        for column_index in range(index_range):
+            if all(row.is_marked(column_index) for row in self.data):
+                count_column += 1
+
+        # 左上→右下方向の対角線上のビンゴをカウント
+        if self.count_marks_from_upper_left() == 5:
+            count_diagonal += 1
+
+        # 右上→左下方向の対角線上のビンゴをカウント
+        if self.count_marks_from_upper_right() == 5:
+            count_diagonal += 1
+
+        return count_row + count_column + count_diagonal
+
+    def count_marks_from_upper_left(self):
+        count: int = 0
+        for index, row in enumerate(self.data, 0):
+            if row.is_marked(index):
+                count += 1
+        return count
+
+    def count_marks_from_upper_right(self):
+        count: int = 0
+        for index, row in enumerate(self.data, 0):
+            if row.is_marked(4 - index):
+                count += 1
+        return count
 
 
 if __name__ == "__main__":
@@ -102,12 +132,11 @@ if __name__ == "__main__":
     card: Card = Card(matrix)
     card.show_card()
 
-    # test_number: int = 1
-    # card.mark_number(test_number)
     card.mark_number(1)
     card.mark_number(2)
     card.mark_number(3)
     card.mark_number(4)
+    card.mark_number(5)
 
     card.mark_number(16)
     card.mark_number(31)
@@ -120,5 +149,8 @@ if __name__ == "__main__":
     card.mark_number(47)
     card.mark_number(61)
 
+    card.mark_number(65)
+
     card.show_card()
     print(f"reach: {card.count_reach()}")
+    print(f"bingo: {card.count_bingo()}")
