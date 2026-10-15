@@ -1,3 +1,4 @@
+import config
 from square import Square
 
 
@@ -26,7 +27,7 @@ class Row:
         for square in self.data:
             if square.is_marked():
                 count_marked += 1
-        return count_marked == 4
+        return count_marked == config.REACH
 
     def is_bingo(self):
         return all(square.is_marked() for square in self.data)
@@ -60,21 +61,21 @@ class Card:
                 count_row += 1
 
         # 列方向のリーチをカウント
-        index_range: int = 5
+        index_range: int = config.NUMBER_OF_SQUARES
         for column_index in range(index_range):
             count_column_marked: int = 0
             for row in self.data:
                 if row.is_marked(column_index):
                     count_column_marked += 1
-            if count_column_marked == 4:
+            if count_column_marked == config.REACH:
                 count_column += 1
 
         # 左上→右下方向の対角線上のリーチをカウント
-        if self.count_marks_from_upper_left() == 4:
+        if self.count_marks_from_upper_left() == config.REACH:
             count_diagonal += 1
 
         # 右上→左下方向の対角線上のリーチをカウント
-        if self.count_marks_from_upper_right() == 4:
+        if self.count_marks_from_upper_right() == config.REACH:
             count_diagonal += 1
 
         return count_row + count_column + count_diagonal
@@ -90,17 +91,17 @@ class Card:
                 count_row += 1
 
         # 列方向のビンゴをカウント
-        index_range: int = 5
+        index_range: int = config.NUMBER_OF_SQUARES
         for column_index in range(index_range):
             if all(row.is_marked(column_index) for row in self.data):
                 count_column += 1
 
         # 左上→右下方向の対角線上のビンゴをカウント
-        if self.count_marks_from_upper_left() == 5:
+        if self.count_marks_from_upper_left() == config.BINGO:
             count_diagonal += 1
 
         # 右上→左下方向の対角線上のビンゴをカウント
-        if self.count_marks_from_upper_right() == 5:
+        if self.count_marks_from_upper_right() == config.BINGO:
             count_diagonal += 1
 
         return count_row + count_column + count_diagonal
